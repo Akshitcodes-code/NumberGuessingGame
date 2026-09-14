@@ -1,63 +1,99 @@
 import random
+
+
 def difficulty():
-    print("E-Easy H-Hard I-Insane")
+    print("\nE - Easy | H - Hard | I - Insane")
+
     while True:
-        try:
-            diff = input("Enter the difficulty level you want:(E/H/I): ").lower()
-            if diff in "ehi":
-                break
-            else:
-                print("Invalid difficulty choice")
-        except:
-            print("No choice")
+        diff = input("Enter the difficulty level (E/H/I): ").lower()
+
+        if diff in ["e", "h", "i"]:
+            break
+
+        print("Invalid difficulty choice")
+
     if diff == "e":
-        return  1000000000000
+        return 10
     elif diff == "h":
         return 5
-    elif diff == "i":
-        return 3        
+    else:
+        return 3
 
-def game():
-    give_tries = difficulty()
+
+def calculate_score(count, give_tries):
+    score = 1000
+
+    if give_tries == 10:
+        score -= count * 100
+    elif give_tries == 5:
+        score -= count * 200
+    elif give_tries == 3:
+        score -= count * 333.333
+
+    return max(0, score)
+
+
+def get_number():
     while True:
         try:
-            a = int(input("Enter any number from(0-100): "))
-        except:
-            print("Invalid choice")
-        rn = random.randint(0,100)
+            number = int(input("\nEnter any number from (0-100): "))
+
+            if 0 <= number <= 100:
+                return number
+
+            print("Enter a number between 0 and 100 only.")
+
+        except ValueError:
+            print("Please enter a valid number.")
+
+
+def game():
+    print("------- NUMBER GUESSING GAME -----------")
+
+    while True:
+        give_tries = difficulty()
+
+        random_number = random.randint(0, 100)
         count = 0
-        if a > 100 or a<0:
-            print("Invalid response")
-        else:
-            while count < give_tries:
-                if a == rn:
-                    print("You win")
-                    count+=1
-                    break
-                else:
-                    if a>rn:
-                        print("Too High")
-                        count+=1
-                    elif a<rn:
-                        print("Too Low")
-                        count+=1
-                    if count == give_tries:
-                        print("YOU LOST ALL YOUR CHANCES ARE OVER")
-                        print("The number was: ",rn)
-                    while count<give_tries :
-                        a = int(input("Enter any number: "))
-                        if a >100 or a<0:
-                            print("Invalid response enter again ")
-                        else:
-                            break            
-            print("You took ",count," tries")
-            choice = input("Do you want to play again(Y/N): ").lower()
-            if choice == "y":
-                give_tries = difficulty()
-                pass
-            elif choice == "n":
+
+        while count < give_tries:
+
+            guess = get_number()
+            count += 1
+
+            if guess == random_number:
+                print("You win! 🎉")
                 break
+
+            elif guess > random_number:
+                print("Too High!")
+
             else:
-                print("Invalid Choice")
+                print("Too Low!")
+
+        else:
+            print("YOU LOST! ALL YOUR CHANCES ARE OVER.")
+            print("The number was:", random_number)
+
+        print("You took", count, "tries")
+
+        print(
+            "Your score is",
+            calculate_score(count - 1, give_tries),
+            "points"
+        )
+
+        choice = input(
+            "\nDo you want to play again? (Y/N): "
+        ).lower()
+
+        if choice == "n":
+            print("Thanks for playing!")
+            break
+
+        elif choice != "y":
+            print("Invalid choice.")
+
+
 if __name__ == "__main__":
     game()
