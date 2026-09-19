@@ -17,7 +17,7 @@ def difficulty():
     elif diff == "h":
         return 5
     else:
-        return 3
+        return 2
 
 
 def calculate_score(count, give_tries):
@@ -27,8 +27,8 @@ def calculate_score(count, give_tries):
         score -= count * 100
     elif give_tries == 5:
         score -= count * 200
-    elif give_tries == 3:
-        score -= count * 333.333
+    elif give_tries == 2:
+        score -= count * 500
 
     return max(0, score)
 
@@ -40,8 +40,8 @@ def get_number():
 
             if 0 <= number <= 100:
                 return number
-
-            print("Enter a number between 0 and 100 only.")
+            else:
+                print("Enter a number between 0 and 100 only.")
 
         except ValueError:
             print("Please enter a valid number.")
@@ -79,7 +79,7 @@ def game():
 
         print(
             "Your score is",
-            calculate_score(count - 1, give_tries),
+            calculate_score(count, give_tries),
             "points"
         )
 
